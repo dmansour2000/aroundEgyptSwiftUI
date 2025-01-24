@@ -11,16 +11,15 @@ import Combine
 class MostRecentExperiencesViewModel: ObservableObject{
     var cancellable = Set<AnyCancellable>()
     
-    @Published var experiences: ExperiencesModel?
-    let service: ExperiencesService
+    @Published var experiences: MostRecentExperiencesModel?
+    let service: MostRecentExperiencesService
     
-    init(service: ExperiencesService){
+    init(service: MostRecentExperiencesService){
         self.service = service
         getServerData()
     }
     
     func getServerData() {
-        Task{
             service.getExperiencesData(url: Constants.recentExperiences)
                 .sink{ completion in switch completion {
                 case .failure(let error): print("error", error)
@@ -31,7 +30,6 @@ class MostRecentExperiencesViewModel: ObservableObject{
                     
                 }
                 .store(in: &cancellable )
-        }
   
     }
     

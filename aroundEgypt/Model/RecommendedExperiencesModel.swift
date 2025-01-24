@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - ExperiencesModel
-struct ExperiencesModel: Codable {
+struct RecommendedExperiencesModel: Codable {
     let meta: Meta
     let data: [Datum]
     let pagination: Pagination

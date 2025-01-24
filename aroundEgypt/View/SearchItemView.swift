@@ -1,16 +1,16 @@
 //
-//  ListItemSwiftUIView.swift
+//  SearchItemView.swift
 //  aroundEgypt
 //
-//  Created by Dina Mansour  on 23/01/2025.
+//  Created by Dina Mansour  on 24/01/2025.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ItemView: View {
+struct SearchItemView: View {
     @State private var imageSaved: Bool = false
-    let item: Datum
+    let item: Datum3
 
     var body: some View {
         HStack {
@@ -75,5 +75,5 @@ struct ItemView: View {
 }
 
 #Preview {
-    ItemView(item: Datum(id: "7351979e-7951-4aad-876f-49d5027438bf", title: "Test", coverPhoto: "https://picsum.photos/id/27/200/300", description: "test", viewsNo: 53, likesNo: 337, recommended: 0, hasVideo: 0, tags: [], city: City(id: 0, name: "", disable: JSONNull(), topPick: 0), tourHTML: "", famousFigure: "", period: Era(id: "", value: "", createdAt: "", updatedAt: ""), era: Era(id: "", value: "", createdAt: "", updatedAt: ""), founded: "", detailedDescription: "", address: "address", gmapLocation: GmapLocation(type: "", coordinates: [0.0]), openingHours: OpeningHours(sunday: [], monday: [], tuesday: [], wednesday: [], thursday: [], friday: [], saturday: []), translatedOpeningHours: TranslatedOpeningHours(sunday: Day(day: "", time: Friday.the07001600), monday: Day(day: "", time: Friday.the07001600), tuesday: Day(day: "", time: Friday.the07001600), wednesday: Day(day: "", time: Friday.the07001600), thursday: Day(day: "", time: Friday.the07001600), friday: Day(day: "", time: Friday.the07001600), saturday: Day(day: "", time: Friday.the07001600)), startingPrice: 0, ticketPrices: [], experienceTips: [], isLiked: JSONNull(), reviews: [], rating: 0, reviewsNo: 0, audioURL: "", hasAudio: true))
+    SearchItemView(item: Datum3(id: "", title: "Test", coverPhoto: "https://picsum.photos/id/27/200/300", description: "Description ....", viewsNo: 67, likesNo: 335, recommended: 0, hasVideo: 0, tags: [], city: City(id: 0, name: "", disable: JSONNull(), topPick: 0), tourHTML: "", famousFigure: "", period: JSONNull(), era: Era3(id: "", value: "", createdAt: "", updatedAt: ""), founded: "", detailedDescription: "", address: "", gmapLocation: GmapLocation3(type: "", coordinates: []), openingHours: OpeningHours3(sunday: [], monday: [], tuesday: [], wednesday: [], thursday: [], friday: [], saturday: []), translatedOpeningHours: TranslatedOpeningHours3(sunday: Day3(day: "", time: ""), monday: Day3(day: "", time: ""), tuesday: Day3(day: "", time: ""), wednesday: Day3(day: "", time: ""), thursday: Day3(day: "", time: ""), friday: Day3(day: "", time: ""), saturday: Day3(day: "", time: "")), startingPrice: 0, ticketPrices: [], experienceTips: [], isLiked: JSONNull(), reviews: [], rating: 0, reviewsNo: 0, audioURL: "", hasAudio: false))
 }

@@ -1,19 +1,19 @@
 //
-//  WelcomeService.swift
+//  RecommendedExperiencesService.swift
 //  aroundEgypt
 //
-//  Created by Dina Mansour  on 23/01/2025.
+//  Created by Dina Mansour  on 24/01/2025.
 //
 
 import Foundation
 import Combine
 
 
-class ExperiencesService {
+class RecommendedExperiencesService {
     
     var cancellable = Set<AnyCancellable>()
     
-    func getExperiencesData(url: String) -> Future<ExperiencesModel, ExperiencesError>{
+    func getExperiencesData(url: String) -> Future<RecommendedExperiencesModel, ExperiencesError>{
         
         return Future { promise in
             guard let url = URL(string: Constants.baseURL + url )else{
@@ -22,13 +22,14 @@ class ExperiencesService {
             
             URLSession.shared.dataTaskPublisher(for: url)
                 .receive(on: DispatchQueue.main)
-                .tryMap{(data, response) in
+                .tryMap { (data, response) in
                     guard let response = response as? HTTPURLResponse, response.statusCode >= 200 && response.statusCode < 300 else {
                         throw ExperiencesError.networkError(description: "Invalid response")
                     }
+                    print("Raw JSON Data: \(String(data: data, encoding: .utf8) ?? "Invalid JSON")")
                     return data
                 }
-                .decode(type: ExperiencesModel.self, decoder: JSONDecoder())
+                .decode(type: RecommendedExperiencesModel.self, decoder: JSONDecoder())
                 .sink{ completion in
                     if case let .failure(error) = completion {
                         switch error {
@@ -51,3 +52,4 @@ class ExperiencesService {
         
     }
 }
+

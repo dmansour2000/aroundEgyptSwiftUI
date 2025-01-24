@@ -1,5 +1,5 @@
 //
-//  MockExperiencesService.swift
+//  MockSearchExperiencesService.swift
 //  aroundEgypt
 //
 //  Created by Dina Mansour  on 24/01/2025.
@@ -9,11 +9,11 @@ import Foundation
 import Combine
 @testable import aroundEgypt
 
-class MockExperiencesService: ExperiencesService {
-    var mockResponse: ExperiencesModel?
+class MockSearchExperiencesService: SearchExperiencesService {
+    var mockResponse: SearchExperiencesModel?
     var mockError: ExperiencesError?
 
-    override func getExperiencesData(url: String) -> Future<ExperiencesModel, ExperiencesError> {
+    override func getExperiencesData(url: String) -> Future<SearchExperiencesModel, ExperiencesError> {
         return Future { promise in
             if let mockError = self.mockError {
                 // Simulate a failure

@@ -14,7 +14,7 @@ struct aroundEgyptApp: App {
     var body: some Scene {
         WindowGroup {
        
-            WelcomeView(recommendedViewModel: RecommendedExperiencesViewModel(service: ExperiencesService()), mostRecentViewModel: MostRecentExperiencesViewModel(service: ExperiencesService()), searchViewModel: SearchExperiencesViewModel(service: ExperiencesService(), searchText: "Luxor"))
+            WelcomeView(recommendedViewModel: RecommendedExperiencesViewModel(service: RecommendedExperiencesService()), mostRecentViewModel: MostRecentExperiencesViewModel(service: MostRecentExperiencesService()), searchViewModel: SearchExperiencesViewModel(service: SearchExperiencesService(), searchText: "Luxor"))
                
         }
     }

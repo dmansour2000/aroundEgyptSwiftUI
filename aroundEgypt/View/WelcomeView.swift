@@ -28,12 +28,8 @@ struct WelcomeView: View {
                 mostRecentSection
                 
                     .padding()
-                    .searchable(text: $searchText, prompt: "Try \"Luxor\"") {
-                        searchResults
-                    }
-                    .onChange(of: searchText) { newValue in
-                        searchViewModel.getServerData(searchText: newValue)
-                    }
+                    
+                   
                     .onAppear {
                         startMonitoringNetwork()
                         if isNetworkAvailable {
@@ -41,6 +37,11 @@ struct WelcomeView: View {
                         }
                     }
             }
+        }.searchable(text: $searchText, prompt: "Try \"Luxor\"") {
+            searchResults
+        }
+        .onChange(of: searchText) { searchText in
+            searchViewModel.getServerData(searchText: searchText)
         }
     }
 
@@ -48,14 +49,18 @@ struct WelcomeView: View {
     
     private func saveToCache() {
         guard let recommendedData = recommendedViewModel.experiences else { return }
-        let memoryCache = MemoryCache<ExperiencesModel>(countLimit: 100)
+        guard let mostRecentData = mostRecentViewModel.experiences else { return }
+        let memoryCache = MemoryCache<RecommendedExperiencesModel>(countLimit: 100)
+        let memoryCache2 = MemoryCache<MostRecentExperiencesModel>(countLimit: 100)
         let fileManager = DefaultFileManager()
-        let diskCache = DiskCache<ExperiencesModel>(fileManager: fileManager)
-        let cache = Cache<ExperiencesModel>(memory: memoryCache, disk: diskCache)
+        let diskCache = DiskCache<RecommendedExperiencesModel>(fileManager: fileManager)
+        let diskCache2 = DiskCache<MostRecentExperiencesModel>(fileManager: fileManager)
+        let cache = Cache<RecommendedExperiencesModel>(memory: memoryCache, disk: diskCache)
+        let cache2 = Cache<MostRecentExperiencesModel>(memory: memoryCache2, disk: diskCache2)
         
         do {
             try cache.save(recommendedData, forKey: "recommended")
-            try cache.save(recommendedData, forKey: "mostrecent")
+            try cache2.save(mostRecentData, forKey: "mostrecent")
         } catch {
             print("Error saving to cache: \(error)")
         }
@@ -92,7 +97,7 @@ private extension WelcomeView {
     var recommendedSection: some View {
         RecommendedSectionView(
             title: "Recommended Experiences",
-            viewModel: recommendedViewModel,
+            recommendedviewModel: recommendedViewModel,
             cacheKey: "recommended",
             isNetworkAvailable: isNetworkAvailable
         )
@@ -102,7 +107,7 @@ private extension WelcomeView {
     var mostRecentSection: some View {
         MostRecentSectionView(
             title: "Most Recent",
-            viewModel: recommendedViewModel,
+            mostrecentviewModel: mostRecentViewModel,
             cacheKey: "mostrecent",
             isNetworkAvailable: isNetworkAvailable
         )
@@ -114,7 +119,7 @@ private extension WelcomeView {
             NavigationLink(
                 destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
             ) {
-                ItemView(item: item)
+                SearchItemView(item: item)
             }
         }
     }
@@ -123,11 +128,12 @@ private extension WelcomeView {
 // MARK: - Section View
 struct RecommendedSectionView: View {
     let title: String
-    @ObservedObject var viewModel: RecommendedExperiencesViewModel
+    @ObservedObject var recommendedviewModel: RecommendedExperiencesViewModel
     let cacheKey: String
     let isNetworkAvailable: Bool
 
     var body: some View {
+        
         VStack(alignment: .leading) {
             Text(title)
                 .font(.title2)
@@ -136,11 +142,11 @@ struct RecommendedSectionView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 16) {
                     if isNetworkAvailable {
-                        ForEach(viewModel.experiences?.data ?? []) { item in
+                        ForEach(recommendedviewModel.experiences?.data ?? []) { item in
                             NavigationLink(
                                 destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
                             ) {
-                                ItemView(item: item)
+                                RecommendedItemView(item: item)
                             }
                         }
                     } else {
@@ -154,10 +160,10 @@ struct RecommendedSectionView: View {
     
    
     private func loadFromCache(forKey key: String) -> some View {
-        let memoryCache = MemoryCache<ExperiencesModel>(countLimit: 100)
+        let memoryCache = MemoryCache<RecommendedExperiencesModel>(countLimit: 100)
         let fileManager = DefaultFileManager()
-        let diskCache = DiskCache<ExperiencesModel>(fileManager: fileManager)
-        let cache = Cache<ExperiencesModel>(memory: memoryCache, disk: diskCache)
+        let diskCache = DiskCache<RecommendedExperiencesModel>(fileManager: fileManager)
+        let cache = Cache<RecommendedExperiencesModel>(memory: memoryCache, disk: diskCache)
 
         return Group {
             if let cachedObject = try? cache.value(forKey: key) {
@@ -165,7 +171,7 @@ struct RecommendedSectionView: View {
                     NavigationLink(
                         destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
                     ) {
-                        ItemView(item: item)
+                        RecommendedItemView(item: item)
                     }
                 }
             } else {
@@ -180,7 +186,7 @@ struct MostRecentSectionView: View {
     
     
     let title: String
-    @ObservedObject var viewModel: RecommendedExperiencesViewModel
+    @ObservedObject var mostrecentviewModel: MostRecentExperiencesViewModel
     let cacheKey: String
     let isNetworkAvailable: Bool
 
@@ -193,11 +199,11 @@ struct MostRecentSectionView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 16) {
                     if isNetworkAvailable {
-                        ForEach(viewModel.experiences?.data ?? []) { item in
+                        ForEach(mostrecentviewModel.experiences?.data ?? []) { item in
                             NavigationLink(
                                 destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
                             ) {
-                                ItemView(item: item)
+                                MostRecentItemView(item: item)
                             }
                         }
                     } else {
@@ -212,10 +218,10 @@ struct MostRecentSectionView: View {
         }
     
     private func loadFromCache(forKey key: String) -> some View {
-        let memoryCache = MemoryCache<ExperiencesModel>(countLimit: 100)
+        let memoryCache = MemoryCache<MostRecentExperiencesModel>(countLimit: 100)
         let fileManager = DefaultFileManager()
-        let diskCache = DiskCache<ExperiencesModel>(fileManager: fileManager)
-        let cache = Cache<ExperiencesModel>(memory: memoryCache, disk: diskCache)
+        let diskCache = DiskCache<MostRecentExperiencesModel>(fileManager: fileManager)
+        let cache = Cache<MostRecentExperiencesModel>(memory: memoryCache, disk: diskCache)
 
         return Group {
             if let cachedObject = try? cache.value(forKey: key) {
@@ -223,7 +229,7 @@ struct MostRecentSectionView: View {
                     NavigationLink(
                         destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
                     ) {
-                        ItemView(item: item)
+                        MostRecentItemView(item: item)
                     }
                 }
             } else {
@@ -239,8 +245,8 @@ struct MostRecentSectionView: View {
 // MARK: - Preview
 #Preview {
     WelcomeView(
-        recommendedViewModel: RecommendedExperiencesViewModel(service: ExperiencesService()),
-        mostRecentViewModel: MostRecentExperiencesViewModel(service: ExperiencesService()),
-        searchViewModel: SearchExperiencesViewModel(service: ExperiencesService(), searchText: "")
+        recommendedViewModel: RecommendedExperiencesViewModel(service: RecommendedExperiencesService()),
+        mostRecentViewModel: MostRecentExperiencesViewModel(service: MostRecentExperiencesService()),
+        searchViewModel: SearchExperiencesViewModel(service: SearchExperiencesService(), searchText: "Luxor")
     )
 }

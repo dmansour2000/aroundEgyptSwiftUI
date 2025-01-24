@@ -11,10 +11,10 @@ import Combine
 class SearchExperiencesViewModel: ObservableObject{
     var cancellable = Set<AnyCancellable>()
     
-    @Published var searchExperiences: ExperiencesModel?
-    let service: ExperiencesService
+    @Published var searchExperiences: SearchExperiencesModel?
+    let service: SearchExperiencesService
     
-    init(service: ExperiencesService, searchText: String){
+    init(service: SearchExperiencesService, searchText: String){
         self.service = service
         getServerData(searchText: searchText)
     }
