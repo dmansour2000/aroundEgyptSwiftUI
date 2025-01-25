@@ -71,6 +71,7 @@ struct SearchDetailView: View {
                                 Button(action: {
                                     likeviewModel.postServerData(id: item.id)
                                     self.likePressed = true
+                                    saveLikeToCache(isLiked: true) // Save updated likePressed to cache
                                 }) {
                                     Image(systemName: self.likePressed ? "heart.fill" : "heart")
                                         .foregroundColor(Color(red: 241/255, green: 135/255, blue: 87/255))
