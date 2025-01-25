@@ -1,32 +1,24 @@
 //
-//  ListItemSwiftUIView.swift
+//  MostRecentDetailView.swift
 //  aroundEgypt
 //
-//  Created by Dina Mansour  on 23/01/2025.
+//  Created by Dina Mansour  on 25/01/2025.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct DetailView: View {
+struct MostRecentDetailView: View {
+    var item: Datum2
     @State private var imageSaved: Bool = false
-    @State private var cachedExperience: SingleExperienceModel?
-    @State private var cachedLike: LikeCacheModel?
     @State private var likePressed: Bool = false
-    @ObservedObject var singleviewModel: SingleExperienceViewModel
+
     @ObservedObject var likeviewModel: LikeExperienceViewModel
     @ObservedObject var networkMonitor = NetworkMonitor()
 
-    private let cache = Cache<SingleExperienceModel>(memory: MemoryCache(countLimit: 100), disk: DiskCache(fileManager: DefaultFileManager()))
-    private let cache2 = Cache<LikeCacheModel>(memory: MemoryCache(countLimit: 100), disk: DiskCache(fileManager: DefaultFileManager()))
-    private let cacheKey: String
-    private let cacheKey2: String
-
-    init(singleviewModel: SingleExperienceViewModel, likeviewModel: LikeExperienceViewModel) {
-        self.singleviewModel = singleviewModel
-        self.cacheKey = "singleExperience_\(singleviewModel.experience?.data.id ?? "100")"
-        self.cacheKey2 = "likeExperience_\(singleviewModel.experience?.data.id ?? "200")"
+    init(likeviewModel: LikeExperienceViewModel, item: Datum2) {
         self.likeviewModel = likeviewModel
+        self.item = item
     }
 
     var body: some View {
@@ -35,8 +27,8 @@ struct DetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
                         ZStack(alignment: .bottomLeading) {
-                            if let imageUrl = singleviewModel.experience?.data.coverPhoto, !imageUrl.isEmpty {
-                                WebImage(url: URL(string: imageUrl))
+                          if !item.coverPhoto.isEmpty {
+                                WebImage(url: URL(string: item.coverPhoto))
                                     .cancelOnDisappear(true)
                                     .resizable()
                                     .onSuccess { image, _, _ in
@@ -50,7 +42,7 @@ struct DetailView: View {
                             HStack(alignment: .bottom) {
                                 Image(systemName: "eye.fill")
                                     .foregroundColor(.white)
-                                Text(String(singleviewModel.experience?.data.viewsNo ?? 0))
+                                Text(String(item.viewsNo ?? 0))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Image(systemName: "photo.on.rectangle")
@@ -61,23 +53,22 @@ struct DetailView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack(alignment: .top) {
                                 VStack(alignment: .leading) {
-                                    Text(singleviewModel.experience?.data.title ?? "Title")
+                                    Text(item.title ?? "Title")
                                         .font(.title2.bold())
                                         .padding(.horizontal, 8)
-                                    Text((singleviewModel.experience?.data.city.name ?? "City") + ", Egypt")
+                                    Text((item.city.name ?? "City") + ", Egypt")
                                         .font(.title2)
                                         .padding(.horizontal, 8)
                                 }
                                 Spacer()
                                 Button(action: {
-                                    likeviewModel.postServerData(id: singleviewModel.experience?.data.id ?? "")
+                                    likeviewModel.postServerData(id: item.id ?? "")
                                     self.likePressed = true
-                                    saveLikeToCache(isLiked: true) // Save updated likePressed to cache
                                 }) {
                                     Image(systemName: self.likePressed ? "heart.fill" : "heart")
                                         .foregroundColor(Color(red: 241/255, green: 135/255, blue: 87/255))
                                 }
-                                Text(String(singleviewModel.experience?.data.likesNo ?? 0))
+                                Text(String(item.likesNo ?? 0))
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.black)
@@ -91,7 +82,7 @@ struct DetailView: View {
                                 Text("Description")
                                     .font(.title.bold())
                                     .padding(.horizontal, 8)
-                                Text(singleviewModel.experience?.data.description ?? "Description")
+                                Text(item.description ?? "Description")
                                     .foregroundStyle(Color(.systemGray))
                                     .padding(.horizontal, 8)
                             }
@@ -100,15 +91,6 @@ struct DetailView: View {
                 }
                 .edgesIgnoringSafeArea(.top)
                 .preferredColorScheme(.light)
-            }
-            .onAppear {
-                if networkMonitor.isConnected {
-                    loadLikeFromCache(id: singleviewModel.experience?.data.id ?? "7351979e-7951-4aad-876f-49d5027438bf")
-                } else {
-                    
-                    loadFromCache()
-                    loadLikeFromCache(id: singleviewModel.experience?.data.id ?? "7351979e-7951-4aad-876f-49d5027438bf")
-                }
             }
         }
     }
@@ -124,41 +106,11 @@ struct DetailView: View {
             }
         }
     }
-
-    // Load Data from Cache
-    private func loadFromCache() {
-        if let cachedObject = try? cache.value(forKey: cacheKey) {
-            cachedExperience = cachedObject
-            singleviewModel.experience = cachedExperience
-        }
-    }
-        
-    private func loadLikeFromCache(id: String) {
-        if let cachedLikeObject = try? cache2.value(forKey: cacheKey2) {
-            if cachedLikeObject.id == id {
-                cachedLike = cachedLikeObject
-                likePressed = cachedLike?.isLiked ?? false
-            }
-        }
-    }
-
-    // Save Like State to Cache
-    private func saveLikeToCache(isLiked: Bool) {
-        cachedLike = LikeCacheModel(id: singleviewModel.experience?.data.id ?? "7351979e-7951-4aad-876f-49d5027438bf" , isLiked: likePressed)
-        let likeObject = cachedLike ?? LikeCacheModel(id: "7351979e-7951-4aad-876f-49d5027438bf", isLiked: false)
-        cachedLike = likeObject
-        do {
-            try cache2.save(likeObject, forKey: cacheKey2)
-        } catch {
-            print("Error saving likePressed to cache: \(error)")
-        }
-    }
 }
 
 // MARK: - Preview
 #Preview {
-    DetailView(
-        singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: "7351979e-7951-4aad-876f-49d5027438bf"),
-        likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: "7351979e-7951-4aad-876f-49d5027438bf")
+    MostRecentDetailView(
+        likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id:  "7351979e-7951-4aad-876f-49d5027438bf"), item: Datum2(id: "", title: "", coverPhoto: "https://picsum.photos/id/27/200/300", description: "Description ...", viewsNo: 337, likesNo: 57, recommended: 0, hasVideo: 0, tags: [], city: City(id: 0, name: "", disable: JSONNull(), topPick: 0), tourHTML: "", famousFigure: "", period: Era2(id: "", value: "", createdAt: "", updatedAt: ""), era: Era2(id: "", value: "", createdAt: "", updatedAt: ""), founded: "", detailedDescription: "", address: "", gmapLocation: GmapLocation2(type: .point, coordinates: []), openingHours: OpeningHours2(sunday: [], monday: [], tuesday: [], wednesday: [], thursday: [], friday: [], saturday: []), translatedOpeningHours: TranslatedOpeningHours2(sunday: FridayClass2(day: .friday, time: ""), monday: FridayClass2(day: .friday, time: ""), tuesday: FridayClass2(day: .friday, time: ""), wednesday: FridayClass2(day: .friday, time: ""), thursday: FridayClass2(day: .friday, time: ""), friday: FridayClass2(day: .friday, time: ""), saturday: FridayClass2(day: .friday, time: "")), startingPrice: 0, ticketPrices: [], experienceTips: [], isLiked: JSONNull(), reviews: [], rating: 0, reviewsNo: 0, audioURL: "", hasAudio: false)
     )
 }

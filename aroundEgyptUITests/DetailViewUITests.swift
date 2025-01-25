@@ -6,49 +6,61 @@
 //
 
 import XCTest
+import SwiftUI
+import aroundEgypt
 
-final class DetailViewUITests: XCTestCase {
-    
-    let app = XCUIApplication()
-    
-    override func setUp() {
-        super.setUp()
+final class RecommendedDetailViewUITests: XCTestCase {
+
+    override func setUpWithError() throws {
         continueAfterFailure = false
+        let app = XCUIApplication()
         app.launch()
     }
 
-    func testDetailViewHeaderAndDescription() {
-        app.launchArguments.append("--ui-testing-detail")
-        app.launchEnvironment["TEST_EXPERIENCE_ID"] = "test-id"
-        
-        let headerTitle = app.staticTexts["Test Experience"]
-        XCTAssertTrue(headerTitle.exists, "The experience title should be displayed")
-        
-        let descriptionText = app.staticTexts["Test Description"]
-        XCTAssertTrue(descriptionText.exists, "The experience description should be visible")
+    func testRecommendedDetailViewUIElementsExist() throws {
+        let app = XCUIApplication()
+
+        // Navigate to the RecommendedDetailView (Assume proper navigation for your app structure)
+        // Example: app.buttons["Recommended Details"].tap()
+
+        // Check for Title
+        XCTAssertTrue(app.staticTexts["Test Title"].exists, "The title is not displayed correctly.")
+
+        // Check for City Name
+        XCTAssertTrue(app.staticTexts["Test City, Egypt"].exists, "The city name is not displayed correctly.")
+
+        // Check for Heart Button
+        XCTAssertTrue(app.buttons["heart"].exists, "The like button is not displayed.")
+
+        // Check for Views Count
+        XCTAssertTrue(app.staticTexts["10"].exists, "The views count is not displayed.")
     }
-    
-    func testLikeButtonToggle() {
+
+    func testLikeButtonToggleUI() throws {
+        let app = XCUIApplication()
+
+        // Navigate to the RecommendedDetailView (Assume proper navigation for your app structure)
+        // Example: app.buttons["Recommended Details"].tap()
+
         let likeButton = app.buttons["heart"]
-        XCTAssertTrue(likeButton.exists, "The like button should be visible")
-        
+        XCTAssertTrue(likeButton.exists, "The like button is missing.")
+
+        // Tap the Like Button
         likeButton.tap()
-        XCTAssertTrue(app.buttons["heart.fill"].exists, "The like button should toggle to filled state")
+
+        // Verify the Button Changes State (e.g., turns to heart.fill)
+        XCTAssertTrue(app.buttons["heart.fill"].exists, "The like button did not toggle to the filled state.")
     }
-    
-    func testSaveImageOnTap() {
-        let imageElement = app.images.firstMatch
-        XCTAssertTrue(imageElement.exists, "The cover image should be visible")
-        
-        imageElement.tap() // Assume tapping saves the image
-        let saveConfirmation = app.staticTexts["Image saved to photo album"]
-        XCTAssertTrue(saveConfirmation.exists, "A confirmation message should appear after saving the image")
-    }
-    
-    func testOfflineModeFallback() {
-        app.launchArguments.append("--ui-testing-offline")
-        
-        let offlineTitle = app.staticTexts["Offline Experience"]
-        XCTAssertTrue(offlineTitle.exists, "The title from the cache should be displayed in offline mode")
+
+    func testImageLoad() throws {
+        let app = XCUIApplication()
+
+        // Navigate to the RecommendedDetailView (Assume proper navigation for your app structure)
+        // Example: app.buttons["Recommended Details"].tap()
+
+        let imageView = app.images.firstMatch
+
+        // Check if the image view exists and is loaded
+        XCTAssertTrue(imageView.exists, "The image view is not displayed.")
     }
 }

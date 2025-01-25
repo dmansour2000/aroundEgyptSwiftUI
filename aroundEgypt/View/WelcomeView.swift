@@ -117,7 +117,7 @@ private extension WelcomeView {
     var searchResults: some View {
         ForEach(searchViewModel.searchExperiences?.data ?? []) { item in
             NavigationLink(
-                destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
+                destination: SearchDetailView(likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id), item: item)
             ) {
                 SearchItemView(item: item)
             }
@@ -144,7 +144,7 @@ struct RecommendedSectionView: View {
                     if isNetworkAvailable {
                         ForEach(recommendedviewModel.experiences?.data ?? []) { item in
                             NavigationLink(
-                                destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
+                                destination: RecommendedDetailView(likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id), item: item)
                             ) {
                                 RecommendedItemView(item: item)
                             }
@@ -169,7 +169,7 @@ struct RecommendedSectionView: View {
             if let cachedObject = try? cache.value(forKey: key) {
                 ForEach(cachedObject.data) { item in
                     NavigationLink(
-                        destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
+                        destination: RecommendedDetailView(likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id), item:  item)
                     ) {
                         RecommendedItemView(item: item)
                     }
@@ -201,7 +201,7 @@ struct MostRecentSectionView: View {
                     if isNetworkAvailable {
                         ForEach(mostrecentviewModel.experiences?.data ?? []) { item in
                             NavigationLink(
-                                destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
+                                destination: MostRecentDetailView( likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id), item: item)
                             ) {
                                 MostRecentItemView(item: item)
                             }
@@ -227,7 +227,7 @@ struct MostRecentSectionView: View {
             if let cachedObject = try? cache.value(forKey: key) {
                 ForEach(cachedObject.data) { item in
                     NavigationLink(
-                        destination: DetailView(singleviewModel: SingleExperienceViewModel(service: SingleExperienceService(), id: item.id), likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id))
+                        destination: MostRecentDetailView(likeviewModel: LikeExperienceViewModel(service: LikeExperienceService(), id: item.id), item: item)
                     ) {
                         MostRecentItemView(item: item)
                     }
