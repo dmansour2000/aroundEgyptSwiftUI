@@ -11,12 +11,19 @@ import SDWebImageSwiftUI
 struct MostRecentDetailView: View {
     var item: Datum2
     @State private var imageSaved: Bool = false
-    @State private var likePressed: Bool = false
+    @State var likePressed: Bool = false
+    @State private var cachedLike: LikeCacheModel?
+    
+  
+        private let cache = Cache<LikeCacheModel>(memory: MemoryCache(countLimit: 100), disk: DiskCache(fileManager: DefaultFileManager()))
+        private let cacheKey: String
+
 
     @ObservedObject var likeviewModel: LikeExperienceViewModel
     @ObservedObject var networkMonitor = NetworkMonitor()
 
     init(likeviewModel: LikeExperienceViewModel, item: Datum2) {
+        self.cacheKey = "likeExperience_\(item.id)"
         self.likeviewModel = likeviewModel
         self.item = item
     }
@@ -42,7 +49,7 @@ struct MostRecentDetailView: View {
                             HStack(alignment: .bottom) {
                                 Image(systemName: "eye.fill")
                                     .foregroundColor(.white)
-                                Text(String(item.viewsNo ?? 0))
+                                Text(String(item.viewsNo))
                                     .foregroundColor(.white)
                                 Spacer()
                                 Image(systemName: "photo.on.rectangle")
@@ -53,22 +60,22 @@ struct MostRecentDetailView: View {
                         VStack(alignment: .leading, spacing: 8) {
                             HStack(alignment: .top) {
                                 VStack(alignment: .leading) {
-                                    Text(item.title ?? "Title")
+                                    Text(item.title)
                                         .font(.title2.bold())
                                         .padding(.horizontal, 8)
-                                    Text((item.city.name ?? "City") + ", Egypt")
+                                    Text((item.city.name) + ", Egypt")
                                         .font(.title2)
                                         .padding(.horizontal, 8)
                                 }
                                 Spacer()
                                 Button(action: {
-                                    likeviewModel.postServerData(id: item.id ?? "")
+                                    likeviewModel.postServerData(id: item.id)
                                     self.likePressed = true
                                 }) {
                                     Image(systemName: self.likePressed ? "heart.fill" : "heart")
                                         .foregroundColor(Color(red: 241/255, green: 135/255, blue: 87/255))
                                 }
-                                Text(String(item.likesNo ?? 0))
+                                Text(String(item.likesNo))
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.black)
@@ -82,7 +89,7 @@ struct MostRecentDetailView: View {
                                 Text("Description")
                                     .font(.title.bold())
                                     .padding(.horizontal, 8)
-                                Text(item.description ?? "Description")
+                                Text(item.description)
                                     .foregroundStyle(Color(.systemGray))
                                     .padding(.horizontal, 8)
                             }
@@ -91,9 +98,34 @@ struct MostRecentDetailView: View {
                 }
                 .edgesIgnoringSafeArea(.top)
                 .preferredColorScheme(.light)
-            }
+            }.onAppear {
+                
+                loadLikeFromCache(id: item.id)
+                }
         }
     }
+
+    private func loadLikeFromCache(id: String) {
+           if let cachedLikeObject = try? cache.value(forKey: cacheKey) {
+               if cachedLikeObject.id == id {
+                   cachedLike = cachedLikeObject
+                   likePressed = cachedLike?.isLiked ?? false
+               }
+           }
+       }
+
+       // Save Like State to Cache
+       private func saveLikeToCache(isLiked: Bool) {
+           cachedLike = LikeCacheModel(id: item.id , isLiked: likePressed)
+           let likeObject = cachedLike ?? LikeCacheModel(id: "7351979e-7951-4aad-876f-49d5027438bf", isLiked: false)
+           cachedLike = likeObject
+           do {
+               try cache.save(likeObject, forKey: cacheKey)
+           } catch {
+               print("Error saving likePressed to cache: \(error)")
+           }
+       }
+   
 
     // Save Image to Photo Album
     func saveImage(image: UIImage?) {
@@ -107,7 +139,6 @@ struct MostRecentDetailView: View {
         }
     }
 }
-
 // MARK: - Preview
 #Preview {
     MostRecentDetailView(
