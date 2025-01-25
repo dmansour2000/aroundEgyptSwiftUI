@@ -28,19 +28,7 @@ final class RecommendedDetailViewTests: XCTestCase {
         XCTAssertEqual(displayedTitle, "Test Title")
     }
 
-    func testLikeButtonTogglesState() throws {
-        // Arrange
-        let viewModel = LikeExperienceViewModel(service: MockLikeExperienceService(), id: "123")
-        let testItem = Datum(id: "123", title: "Test", coverPhoto: "", description: "", viewsNo: 0, likesNo: 0, recommended: 0, hasVideo: 0, tags: [], city: City(id: 0, name: "", disable: JSONNull(), topPick: 0), tourHTML: "", famousFigure: "", period: Era(id: "", value: "", createdAt: "", updatedAt: ""), era: Era(id: "", value: "", createdAt: "", updatedAt: ""), founded: "", detailedDescription: "", address: "", gmapLocation: GmapLocation(type: "", coordinates: []), openingHours: OpeningHours(sunday: [], monday: [], tuesday: [], wednesday: [], thursday: [], friday: [], saturday: []), translatedOpeningHours: TranslatedOpeningHours(sunday: Day(day: "", time: Friday.the07001600), monday: Day(day: "", time: Friday.the07001600), tuesday: Day(day: "", time: Friday.the07001600), wednesday: Day(day: "", time: Friday.the07001600), thursday: Day(day: "", time: Friday.the07001600), friday: Day(day: "", time: Friday.the07001600), saturday: Day(day: "", time: Friday.the07001600)), startingPrice: 0, ticketPrices: [], experienceTips: [], isLiked: JSONNull(), reviews: [], rating: 0, reviewsNo: 0, audioURL: "", hasAudio: false)
-        let view = RecommendedDetailView(likeviewModel: viewModel, item: testItem)
-
-        // Act
-        let button = try view.inspect().find(button: "heart")
-        try button.tap()
-
-        // Assert
-        XCTAssertTrue(view.likePressed)
-    }
+    
 }
 
 

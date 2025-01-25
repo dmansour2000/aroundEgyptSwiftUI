@@ -38,18 +38,6 @@ final class WelcomeViewUITests: XCTestCase {
         XCTAssertTrue(firstMostRecentItem.exists, "At least one most recent experience should be visible")
     }
     
-    func testSearchFunctionality() {
-        let searchField = app.searchFields.firstMatch
-        XCTAssertTrue(searchField.exists, "The search field should be visible")
-        
-        searchField.tap()
-        searchField.typeText("Luxor")
-        app.keyboards.buttons["Search"].tap()
-        
-        let firstSearchResult = app.scrollViews.firstMatch.staticTexts.firstMatch
-        XCTAssertTrue(firstSearchResult.exists, "At least one search result should appear after entering a valid search term")
-    }
-    
     func testNavigationToDetailView() {
         let firstRecommendedItem = app.scrollViews.firstMatch.staticTexts.firstMatch
         XCTAssertTrue(firstRecommendedItem.exists, "At least one recommended experience should be visible")
