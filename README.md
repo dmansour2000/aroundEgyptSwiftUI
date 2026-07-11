@@ -6,11 +6,13 @@ This native iOS mobile app, built with SwiftUI, leverages the aroundEgypt API us
 
 ### App Screenshots
 <p>
-   <img src="https://github.com/dmansour2000/RickAndMortyAPIUIKitWithSwiftUI/blob/main/screenshots/Simulator%20Screenshot%20-%20iPhone%20SE%20(3rd%20generation)%20-%202024-10-17%20at%2021.08.06.png", width="150" hspace="4"/>
-   <img src="https://github.com/dmansour2000/RickAndMortyAPIUIKitWithSwiftUI/blob/main/screenshots/Simulator%20Screenshot%20-%20iPhone%20SE%20(3rd%20generation)%20-%202024-10-17%20at%2021.08.44.png", width="150" hspace="4"/>
-   <img src="https://github.com/dmansour2000/RickAndMortyAPIUIKitWithSwiftUI/blob/main/screenshots/Simulator%20Screenshot%20-%20iPhone%20SE%20(3rd%20generation)%20-%202024-10-17%20at%2021.08.53.png", width="150" hspace="4"/>
-   <img src="https://github.com/dmansour2000/RickAndMortyAPIUIKitWithSwiftUI/blob/main/screenshots/Simulator%20Screenshot%20-%20iPhone%20SE%20(3rd%20generation)%20-%202024-10-17%20at%2021.09.04.png", width="150" hspace="4"/>
-  <img src="https://github.com/dmansour2000/RickAndMortyAPIUIKitWithSwiftUI/blob/main/screenshots/Simulator%20Screenshot%20-%20iPhone%20SE%20(3rd%20generation)%20-%202024-10-17%20at%2021.09.11.png", width="150" hspace="4"/>
+   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.56.51.png", width="150" hspace="4"/>
+   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.23.png", width="150" hspace="4"/>
+   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.29.png", width="150" hspace="4"/>
+   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.42.png", width="150" hspace="4"/>
+  <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.48.png", width="150" hspace="4"/>
+</p>
+  <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.58.17.png", width="150" hspace="4"/>
 </p>
 
 
