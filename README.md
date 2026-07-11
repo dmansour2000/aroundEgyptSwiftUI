@@ -7,7 +7,6 @@ This native iOS mobile app, built with SwiftUI, leverages the aroundEgypt API us
 ### App Screenshots
 <p>
    <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.56.51.png", width="150" hspace="4"/>
-   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.23.png", width="150" hspace="4"/>
    <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.29.png", width="150" hspace="4"/>
    <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.42.png", width="150" hspace="4"/>
   <img src="https://github.com/dmansour2000/aroundEgyptSwiftUI/blob/main/Simulator%20Screenshot%20-%20iPhone%2016e%20-%202026-07-12%20at%2000.57.48.png", width="150" hspace="4"/>
